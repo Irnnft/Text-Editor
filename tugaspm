@@ -7,7 +7,6 @@ public class TextEditor {
     private Stack<String> redoStack; 
     private String currentText;       
 
-    // Constructor
     public TextEditor() {
         undoStack = new Stack<>();
         redoStack = new Stack<>();
