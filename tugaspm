@@ -1,0 +1,90 @@
+package tugaspm;
+import java.util.Scanner;
+import java.util.Stack;
+
+public class TextEditor {
+    private Stack<String> undoStack;  
+    private Stack<String> redoStack; 
+    private String currentText;       
+
+    // Constructor
+    public TextEditor() {
+        undoStack = new Stack<>();
+        redoStack = new Stack<>();
+        currentText = "";  
+    }
+
+    public void show() {
+        System.out.println("Teks saat ini: ");
+        System.out.println(currentText.isEmpty() ? "(kosong)" : currentText);
+    }
+
+    public void write(String newText) {
+        
+        undoStack.push(currentText);
+        currentText += newText;  
+        redoStack.clear();
+        System.out.println("Menambahkan teks: " + newText);
+    }
+
+    public void undo() {
+        if (!undoStack.isEmpty()) {
+            
+            redoStack.push(currentText);
+            
+            currentText = undoStack.pop();
+            System.out.println("Undo berhasil.");
+        } else {
+            System.out.println("Tidak ada tindakan yang bisa di-undo.");
+        }
+    }
+
+    public void redo() {
+        if (!redoStack.isEmpty()) {
+            
+            undoStack.push(currentText);
+            
+            currentText = redoStack.pop();
+            System.out.println("Redo berhasil.");
+        } else {
+            System.out.println("Tidak ada tindakan yang bisa di-redo.");
+        }
+    }
+
+    public static void main(String[] args) {
+        TextEditor editor = new TextEditor();
+        Scanner scanner = new Scanner(System.in);
+        String perintah;
+
+        
+        while (true) {
+            System.out.println("\nMasukkan perintah (write, undo, redo, show, exit): ");
+            perintah = scanner.nextLine();
+
+            if (perintah.equals("write")) {
+                System.out.print("Masukkan teks yang ingin ditulis: ");
+                String newText = scanner.nextLine();
+                editor.write(newText);
+
+            } else if (perintah.equals("undo")) {
+                editor.undo();
+
+            } else if (perintah.equals("redo")) {
+                editor.redo();
+
+            } else if (perintah.equals("show")) {
+                editor.show();
+
+            } else if (perintah.equals("exit")) {
+                System.out.println("Keluar dari Text Editor.");
+                break;
+
+            } else {
+                System.out.println("Perintah tidak valid. Silakan masukkan write, undo, redo, show, atau exit.");
+            }
+        }
+
+        scanner.close();
+    }
+}
+
